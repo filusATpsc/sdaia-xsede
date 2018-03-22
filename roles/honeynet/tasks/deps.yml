@@ -1,0 +1,88 @@
+---
+- name: run yum install epel-release
+  package: name=epel-release state=present
+  when: (ansible_distribution == "CentOS")
+
+- name: Add apt HTTPS support
+  package: name=apt-transport-https state=present
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add HTTPS support
+  package: name=ca-certificates state=present
+
+- name: Add ubuntu docker key
+  apt_key: keyserver=hkp://p80.pool.sks-keyservers.net:80 id=58118E89F3A912897C070ADBF76221572C52609D
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add ubuntu docker repo
+  apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-xenial main' state=present filename=docker
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add yum docker repo
+  yum_repository:
+    name: docker_repo
+    description: docker_repo
+    baseurl: https://yum.dockerproject.org/repo/main/centos/$releasever/
+    gpgkey: https://yum.dockerproject.org/gpg
+    gpgcheck: yes
+  when: (ansible_distribution == "CentOS")
+
+- name: Update apt cache if needed.
+  apt: update_cache=yes upgrade=yes
+  when: (ansible_distribution == "Ubuntu")
+
+- name: install ubuntu deps
+  package:
+    state: latest
+    pkg: "{{ item }}"
+  with_items:
+    - linux-image-extra-virtual
+    - docker-engine
+    - htop
+    - python-virtualenv
+    - python-pip
+    - virtualenvwrapper
+    - libssl-dev
+    - aptitude
+    - uuid-dev
+#    - libzyre-dev
+  when: (ansible_distribution == "Ubuntu")
+
+- name: install centos deps
+  package:
+    state: latest
+    pkg: "{{ item }}"
+  with_items:
+    - docker-engine
+    - htop
+    - python-virtualenv
+    - python-pip
+    - gcc
+    - python-devel
+    - libffi-devel
+    - openssl-devel
+    - htop
+    - git
+    - "@Development Tools"
+    - sqlite-devel
+    - python-virtualenvwrapper
+    - uuid-devel
+    - uuid
+    - libuuid-devel
+#    - zyre-devel
+  when: (ansible_distribution == "CentOS")
+
+- name: upgrade pip
+  pip: name=pip extra_args="--upgrade"
+
+- name: upgrade cython
+  pip: name=cython
+
+- name: install certain python modules for docker
+  pip:
+    name: "{{ item.name }}"
+    version: "{{ item.version }}"
+    state: present
+  with_items:
+  - { name: docker-compose, version: 1.9.0 }
+  - { name: docker-py, version: 1.10.6 }

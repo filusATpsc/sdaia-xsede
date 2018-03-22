@@ -1,0 +1,20 @@
+[Unit]
+Description=csirtg-cef-zmq service
+
+[Service]
+Type=simple
+User={{ app_user }}
+Group={{ app_user }}
+PIDFile=/run/csirtg-cef_zyre.pid
+#ExecStart=/usr/local/bin/csirtg-cef --client zyre --tail-docker {{ docker_container_name }} -d --provider "{{ ssh_logger_provider }}"
+ExecStart=/usr/local/bin/csirtg-cef -d --aggregate=1 --tail-docker {{ docker_container_name }} --client zmq --tags {{ csirtg_tags }}
+KillMode=process
+Restart=on-failure
+KillSignal=SIGINT
+TimeoutStopSec=5
+PrivateTmp=true
+
+EnvironmentFile=-/etc/csirtg-cef.env
+
+[Install]
+WantedBy=multi-user.target

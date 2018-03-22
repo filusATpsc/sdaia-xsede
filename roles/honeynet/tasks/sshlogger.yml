@@ -1,0 +1,29 @@
+---
+- user: name="{{ ansible_env.SUDO_USER }}" groups=docker append=yes
+
+- name: systemd services
+  template: src=ssh-auth-logger.service.j2 dest=/etc/systemd/system/ssh-auth-logger.service owner=root group=root mode=0644
+  notify:
+    - reload systemd
+    - start docker
+  when: (ansible_distribution == "CentOS")
+
+- name: systemd services
+  template: src=ssh-auth-logger.service.j2 dest=/etc/systemd/system/ssh-auth-logger.service owner=root group=root mode=0644
+  notify:
+    - reload systemd
+  when: (ansible_distribution == "Ubuntu")
+
+- name: pull recent docker image
+  command: docker pull "justinazoff/ssh-auth-logger:{{ ssh_logger_version }}"
+  async: 300
+  poll: 5
+
+#- name: start ssh-auth-logger
+#  service: name=ssh-auth-logger.service state=started
+
+- name: enable ssh-auth-logger at boot
+  service: name=ssh-auth-logger.service enabled=yes state=started
+  notify:
+    - reload systemd
+

@@ -1,0 +1,6 @@
+---
+
+- name: clone pyzyre source
+  git:
+    repo: 'https://github.com/wesyoung/pyzyre.git'
+    dest: /usr/local/pyzyre

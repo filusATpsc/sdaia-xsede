@@ -1,0 +1,16 @@
+[Unit]
+Description=Bro
+After=network.target
+
+[Service]
+ExecStartPre=-{{ bro_prefix }}/bin/broctl cleanup
+ExecStartPre={{ bro_prefix }}/bin/broctl check
+ExecStartPre={{ bro_prefix }}/bin/broctl install
+ExecStart={{ bro_prefix }}/bin/broctl start
+ExecStop={{ bro_prefix }}/bin/broctl stop
+RestartSec=10s
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

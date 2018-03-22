@@ -1,0 +1,11 @@
+---
+
+- name: reload systemd
+  command: systemctl daemon-reload
+
+- name: start csirtg-cef-zmq
+  command: systemctl start csirtg-cef-zmq
+
+- name: stop csirtg-cef-zmq
+  command: systemctl stop csirtg-cef-zmq
+

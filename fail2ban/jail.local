@@ -1,0 +1,28 @@
+
+[sshsub]
+enabled = false
+port    = ssh
+logpath = /tmp/ssh.txt
+banaction = ufw
+bantime  = 600
+findtime  = 600
+maxretry = 3
+
+[extern_sshsub]
+enabled = true
+port    = ssh
+logpath = /tmp/ssh.txt
+banaction = ufw
+bantime  = 600
+findtime  = 600
+maxretry = 3
+
+[local_sshsub]
+enabled = true
+port    = ssh
+logpath = /tmp/ssh.txt
+banaction = ufw
+bantime  = 600
+findtime  = 600
+maxretry = 50
+

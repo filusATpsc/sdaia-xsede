@@ -1,0 +1,13 @@
+---
+- user: name="{{ app_user }}" shell=/bin/bash append=yes groups=adm
+
+- name: Ensure path has correct permissions
+  file: path={{ app_user_home }} owner={{ app_user }} group={{ app_group }} mode=0750
+
+- user: name="{{ ansible_env.SUDO_USER }}" groups={{ app_group }} append=yes
+
+- name: add docker group
+  group: name=docker state=present system=yes
+
+- name: add "{{ app_user }}" to docker group
+  user: name="{{ app_user }}" groups=docker append=yes

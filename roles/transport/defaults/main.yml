@@ -1,0 +1,14 @@
+---
+
+
+# user and group
+app_user: prism
+app_group: "{{ app_user }}"
+app_user_home: "/home/{{ app_user }}"
+
+# interface created by tinc/avahi, don't change!
+zsys_interface: "zyre:avahi"
+
+# zyre channel on which gateway joins
+zyre_group: ssh
+

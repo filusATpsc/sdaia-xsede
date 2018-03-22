@@ -1,0 +1,8 @@
+---
+
+
+# user and group
+app_user: prism
+app_group: "{{ app_user }}"
+app_user_home: "/home/{{ app_user }}"
+

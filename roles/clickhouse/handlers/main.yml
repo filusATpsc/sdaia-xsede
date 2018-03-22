@@ -1,0 +1,11 @@
+---
+
+- name: reload systemd
+  command: systemctl daemon-reload
+
+- name: start clickhouse-server
+  command: systemctl start clickhouse-server
+
+- name: stop clickhouse-server
+  command: systemctl stop clickhouse-server
+

@@ -1,0 +1,56 @@
+---
+
+- name: Creates /usr/local/src directory
+  file: path=/usr/local/src state=directory
+
+- stat: path=/usr/local/gateway
+  register: gatewaydir
+- name: remove existing gatewaydir
+  command: rm -rf /usr/local/gateway
+  when: gatewaydir.stat.exists == True
+- name: Copy over gateway.s
+  synchronize: mode=pull src=gateway.s dest=/usr/local
+- name: rename gateway dir
+  command: mv /usr/local/gateway.s /usr/local/gateway
+
+- name: Create gateway public keys directory
+  file: path=/usr/local/gateway/public_keys state=directory
+
+- name: generate gateway keys
+  command: /usr/local/gateway/gateway keygen
+  args:
+    chdir: "/usr/local/gateway"
+
+- name: Ensure gateway directory is owned by app_user
+  command: find /usr/local/gateway -exec chown {{ app_user }}.{{ app_user}} {} \;
+
+- name: Create sdaiakeys directory
+  file: path=/usr/local/sdaiakeys state=directory
+- git:
+    repo: https://github.com/ncsa/sdaiakeys
+    dest: /usr/local/sdaiakeys
+
+- copy: src={{ item }} dest=/usr/local/gateway/public_keys
+  with_fileglob:
+    - /usr/local/sdaiakeys/public_keys/*
+
+- name: systemd services
+  template: src=zyre-gateway.service.j2 dest=/etc/systemd/system/zyre-gateway.service owner=root group=root mode=0644
+  notify:
+    - reload systemd
+  when: (ansible_distribution == "CentOS")
+
+- name: systemd services
+  template: src=zyre-gateway.service.j2 dest=/etc/systemd/system/zyre-gateway.service owner=root group=root mode=0644
+  notify:
+    - reload systemd
+  when: (ansible_distribution == "Ubuntu")
+
+- name: start zyre
+  service: name=zyre-gateway.service state=started
+
+- name: enable zyre gateway services at boot
+  service: name=zyre-gateway.service enabled=yes state=started
+  notify:
+    - reload systemd
+

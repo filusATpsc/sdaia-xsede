@@ -1,0 +1,51 @@
+#---
+#- name: run yum install epel-release
+#  package: name=epel-release state=present
+#  when: (ansible_distribution == "CentOS")
+
+- name: Add apt HTTPS support
+  package: name=apt-transport-https state=present
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add HTTPS support
+  package: name=ca-certificates state=present
+
+- name: Add apt bro keys
+  apt_key: url='http://download.opensuse.org/repositories/network:bro/Debian_8.0/Release.key'
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add apt bro repo
+  apt_repository: repo='deb http://download.opensuse.org/repositories/network:/bro/xUbuntu_16.04/ /'
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add yum bro repo
+  yum_repository:
+    name: bro_ids
+    description: bro ids
+    baseurl: http://download.opensuse.org/repositories/network:/bro/CentOS_7/
+    gpgkey: http://download.opensuse.org/repositories/network:/bro/CentOS_7/repodata/repomd.xml.key
+    gpgcheck: yes
+  when: (ansible_distribution == "CentOS")
+
+- name: Update apt cache if needed.
+  apt: update_cache=yes upgrade=yes
+  when: (ansible_distribution == "Ubuntu")
+
+- name: install ubuntu deps
+  package:
+    state: latest
+    pkg: "{{ item }}"
+  with_items:
+    - bro
+  when: (ansible_distribution == "Ubuntu")
+
+- name: install centos deps
+  package:
+    state: latest
+    pkg: "{{ item }}"
+  with_items:
+    - bro
+  when: (ansible_distribution == "CentOS")
+
+- name: Creates bro log spool directory
+  file: path={{ bro_prefix }}/logs/spool state=directory

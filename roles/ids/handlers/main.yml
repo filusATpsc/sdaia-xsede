@@ -1,0 +1,10 @@
+---
+
+- name: reload systemd
+  command: systemctl daemon-reload
+
+- name: start bro
+  command: systemctl start bro
+
+- name: stop bro
+  command: systemctl stop bro

@@ -1,0 +1,22 @@
+---
+# defaults file for ssh-logger
+
+ssh_traffic_port: 22  # port docker routes traffic from to it's logger
+sshd_alt_port: 1100     # alternative sshd port
+docker_container_name: 'ssh_logger_kit'
+ssh_logger_version: latest
+ssh_logger_provider: 'localhost'
+
+app_user: prism
+app_group: "{{ app_user }}"
+app_user_home: "/home/{{ app_user }}"
+
+zsys_interface: "zyre:avahi"
+
+smrt_provider: localhost
+smrt_version: 0.0.0a40
+indicator_version: 0.0.0b14
+smrt_client: zyre
+
+pyzyre_version: 0.0.0a13
+

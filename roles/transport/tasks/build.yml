@@ -1,0 +1,117 @@
+---
+
+# BEGIN TEST COMPILE SECTION
+# using static binaries, don't compile for now
+# install libzmq
+#- name: Creates libzmq directory
+#  file: path=/usr/local/src/libzmq state=directory
+#- git:
+#    repo: https://github.com/zeromq/libzmq.git 
+#    dest: /usr/local/src/libzmq
+#- name: autogen.sh libzmq
+#  command: ./autogen.sh
+#  args:
+#    chdir: "/usr/local/src/libzmq"
+#- name: configure libzmq
+#  command: ./configure
+#  args:
+#    chdir: "/usr/local/src/libzmq"
+#- name: make libzmq
+#  command: make
+#  args:
+#    chdir: "/usr/local/src/libzmq"
+#- name: make install libzmq
+#  command: make install
+#  args:
+#    chdir: "/usr/local/src/libzmq"
+#- name: run ldconfig
+#  command: ldconfig
+
+# install czmq
+#- name: czmq git hack part1, fixme
+#  command: rm -rf /usr/local/src/czmq.moved
+#- stat: path=/usr/local/src/czmq
+#  register: czmqsourcedir
+#- name: czmq git hack part2, fixme
+#  command: mv /usr/local/src/czmq /usr/local/src/czmq.moved
+#  when: czmqsourcedir.stat.exists == True
+#- name: Creates czmq directory
+#  file: path=/usr/local/src/czmq state=directory
+#- name: git czmq
+#  git:
+#    repo: git://github.com/wesyoung/czmq.git
+#    version: feat/curve
+#    force: yes
+#    dest: /usr/local/src/czmq
+#- name: czmq git add upstream
+#  command: git remote add upstream git://github.com/zeromq/czmq.git
+#  args:
+#    chdir: "/usr/local/src/czmq"
+#- name: czmq git fetch
+#  command: git fetch
+#  args:
+#    chdir: "/usr/local/src/czmq"
+#- name: czmq git add upstream
+#  command: git pull --no-commit upstream master
+#  args:
+#    chdir: "/usr/local/src/czmq"
+#- name: autogen.sh czmq
+#  command: ./autogen.sh
+#  args:
+#    chdir: "/usr/local/src/czmq"
+#- name: configure czmq
+#  command: ./configure
+#  args:
+#    chdir: "/usr/local/src/czmq"
+#- name: make czmq
+#  command: make
+#  args:
+#    chdir: "/usr/local/src/czmq"
+#- name: make install czmq
+#  command: make install
+#  args:
+#    chdir: "/usr/local/src/czmq"
+#- name: run ldconfig
+#  command: ldconfig
+#
+## install zyre
+#- name: Creates zyre directory
+#  file: path=/usr/local/src/zyre state=directory
+#- git:
+#    repo: git://github.com/JustinAzoff/zyre.git
+#    version: curve_merges
+#    dest: /usr/local/src/zyre
+#- name: autogen.sh zyre
+#  command: ./autogen.sh
+#  args:
+#    chdir: "/usr/local/src/zyre"
+#- name: configure zyre
+#  command: ./configure
+#  args:
+#    chdir: "/usr/local/src/zyre"
+#- name: make
+#  command: make
+#  args:
+#    chdir: "/usr/local/src/zyre"
+#- name: make install zyre
+#  command: make install
+#  args:
+#    chdir: "/usr/local/src/zyre"
+#- name: run ldconfig
+#  command: ldconfig
+#
+## install gateway
+#- name: Create gateway directory
+#  file: path=/usr/local/gateway state=directory
+#- git:
+#    repo: git://github.com/JustinAzoff/simpledisco.git
+#    dest: /usr/local/gateway
+#- name: make gateway step 1
+#  command: make
+#  args:
+#    chdir: "/usr/local/gateway"
+#- name: make gateway step 2
+#  command: make -f Makefile.gateway gateway.static
+#  args:
+#    chdir: "/usr/local/gateway"
+# END TEST COMPILE SECTION

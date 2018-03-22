@@ -1,0 +1,49 @@
+---
+
+# install cifv3
+- synchronize: mode=pull src=bearded-avenger-deploymentkit dest=/usr/local/src
+#- name: untar cifv3
+#  command: tar vxf bearded-avenger-deploymentkit.tar
+#  args:
+#    chdir: "/usr/local/src"
+- name: deploy cifv3
+  command: /bin/bash easybutton.sh
+  args:
+    chdir: "/usr/local/src/bearded-avenger-deploymentkit"
+
+- name: systemd env file
+  template: src=csirtg-cef.env.j2 dest=/etc/csirtg-cef.env mode=0660 owner="{{ app_user }}" group="{{ app_user }}" mode=644
+
+- name: csirtg-cef-zmq systemd services
+  template: src=csirtg-cef-zmq.service.j2 dest=/etc/systemd/system/csirtg-cef-zmq.service owner=root group=root mode=0644
+  notify:
+    - reload systemd
+  when: (ansible_distribution == "CentOS")
+
+- name: csirtg-cef-zmq systemd services
+  template: src=csirtg-cef-zmq.service.j2 dest=/etc/systemd/system/csirtg-cef-zmq.service owner=root group=root mode=0644
+  notify:
+    - reload systemd
+  when: (ansible_distribution == "Ubuntu")
+
+- name: start csirt-cef-zmq
+  service: name=csirtg-cef-zmq.service state=started
+
+- name: enable csirt-cef-zmq at boot
+  service: name=csirtg-cef-zmq.service enabled=yes state=started
+  notify:
+    - reload systemd
+
+- name: patch csirtg zmq
+  copy:
+    remote_src: true
+    src: zzmq.py
+    dest: /usr/local/lib/python2.7/dist-packages/csirtg_smrt/client/
+  when: (ansible_distribution == "Ubuntu")
+
+- name: patch csirtg zmq
+  copy:
+    remote_src: true
+    src: zzmq.py
+    dest: /usr/lib/python2.7/site-packages/csirtg_smrt/client/
+  when: (ansible_distribution == "CentOS")

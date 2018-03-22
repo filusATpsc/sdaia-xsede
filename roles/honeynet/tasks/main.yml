@@ -1,0 +1,26 @@
+---
+# tasks file for ssh-logger
+
+- include: firewall.yml
+  tags: firewall
+
+- include: deps.yml
+  tags: deps
+
+- include: sshd.yml
+  tags: sshd
+
+- include: pyzyre.yml
+  tags: pyzyre
+
+- include: users.yml
+  tags: users
+
+- include: sshlogger.yml
+  tags: sshlogger
+
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted
+

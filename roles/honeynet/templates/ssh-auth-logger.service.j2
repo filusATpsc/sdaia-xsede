@@ -1,0 +1,15 @@
+[Unit]
+Description=ssh-auth-logger Container
+After=docker.service
+Requires=docker.service
+ 
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop ssh-auth-logger
+ExecStartPre=-/usr/bin/docker rm ssh-auth-logger
+ExecStop=-/usr/bin/docker stop ssh-auth-logger
+ExecStart=/usr/bin/docker run -h ssh-auth-logger --network host -p 22:22 --name ssh-auth-logger justinazoff/ssh-auth-logger
+ 
+[Install]
+WantedBy=multi-user.target

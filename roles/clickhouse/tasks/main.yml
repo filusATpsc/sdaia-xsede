@@ -1,0 +1,13 @@
+---
+
+- include: deps.yml
+  tags: deps
+
+- name: start clickhouse server
+  service: name=clickhouse-server.service state=started
+
+- name: enable clickhouse server services at boot
+  service: name=clickhouse-server.service enabled=yes state=started
+  notify:
+    - reload systemd
+

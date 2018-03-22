@@ -1,0 +1,14 @@
+---
+
+- include: users.yml
+  tags: users
+
+- include: firewall.yml
+  tags: firewall
+
+- include: deps.yml
+  tags: deps
+
+- include: smrt.yml
+  tags: smrt
+

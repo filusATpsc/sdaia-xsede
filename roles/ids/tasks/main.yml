@@ -1,0 +1,15 @@
+---
+
+- name: find our default interface IP
+  shell: /sbin/ip route get 8.8.8.8 | /usr/bin/awk 'NR==1 {print $NF}'; echo
+  register: default_int
+
+- include: users.yml
+  tags: users
+
+- include: deps.yml
+  tags: deps
+
+- include: bro.yml
+  tags: bro
+

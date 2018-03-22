@@ -1,0 +1,13 @@
+---
+- name: start docker
+  service:
+    name: docker
+    state: started
+
+- name: restart sshd
+  service:
+    name: sshd
+    state: restarted
+
+- name: reload systemd
+  command: systemctl daemon-reload

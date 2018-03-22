@@ -1,0 +1,21 @@
+---
+
+- include: users.yml
+  tags: users
+
+- name: find our default interface IP
+  shell: /sbin/ip route get 8.8.8.8 | /usr/bin/awk 'NR==1 {print $NF}'; echo
+  register: default_int
+
+- name: systemd env file
+  template: src=zyre_gateway.env.j2 dest=/etc/zyre_gateway.env mode=0660 owner="{{ app_user }}" group="{{ app_user }}" mode=644
+
+- include: firewall.yml
+  tags: firewall
+
+- include: deps.yml
+  tags: deps
+
+- include: zyregw.yml
+  tags: zyregw
+

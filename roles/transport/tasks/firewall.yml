@@ -1,0 +1,8 @@
+---
+- ufw: rule=allow port=5670 proto=tcp state=enabled
+  tags: ufw
+  when: (ansible_distribution == "Ubuntu")
+
+- firewalld: port=5670/tcp permanent=true state=enabled immediate=yes
+  when: (ansible_distribution == "CentOS")
+

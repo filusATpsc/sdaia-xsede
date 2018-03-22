@@ -1,0 +1,7 @@
+---
+
+- name: Setup alternate SSH port
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: "^Port"
+    line: "Port {{ sshd_alt_port }}"

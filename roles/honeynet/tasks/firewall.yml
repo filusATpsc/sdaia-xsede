@@ -1,0 +1,24 @@
+---
+- file: path=/var/log/ufw.log owner=syslog group=adm mode=640 state=touch
+  tags: ufw
+  when: (ansible_distribution == "Ubuntu")
+
+- ufw: rule=allow port="{{ item }}" state=enabled
+  with_items:
+    - "{{ ssh_traffic_port }}"
+    - "{{ sshd_alt_port }}"
+    - 22
+  tags: ufw
+  when: (ansible_distribution == "Ubuntu")
+
+- firewalld: port=22/tcp permanent=true state=enabled immediate=yes
+  when: (ansible_distribution == "CentOS")
+
+- firewalld: port="{{ sshd_alt_port }}/tcp" permanent=true state=enabled immediate=yes
+  when: (ansible_distribution == "CentOS")
+
+- command: /usr/bin/firewall-cmd --reload
+  when: (ansible_distribution == "CentOS")
+
+- command: /usr/sbin/semanage port -a -t ssh_port_t -p tcp "{{ sshd_alt_port }}"
+  ignore_errors: True

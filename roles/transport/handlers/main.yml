@@ -1,0 +1,11 @@
+---
+
+- name: reload systemd
+  command: systemctl daemon-reload
+
+- name: start zyre-gateway
+  command: systemctl start zyre-gateway
+
+- name: stop zyre-gateway
+  command: systemctl stop zyre-gateway
+

@@ -1,0 +1,59 @@
+---
+
+- name: Creates /usr/local/src directory
+  file: path=/usr/local/src state=directory
+
+# install bro
+#- name: Download Bro IDS
+#  command: /usr/bin/wget https://www.bro.org/downloads/release/bro-{{ bro_ver }}.tar.gz
+#  args:
+#    chdir: "/usr/local/src"
+#- name: Download Bro IDS sig
+#  command: /usr/bin/wget https://www.bro.org/downloads/release/bro-{{ bro_ver }}.tar.gz.asc
+#  args:
+#    chdir: "/usr/local/src"
+#- name: Download Bro IDS public key
+#  command: /usr/bin/wget -O bro.pubkey 'http://pgp.mit.edu:11371/pks/lookup?op=get&search=0x33F15EAEF8CB8019'
+#  args:
+#    chdir: "/usr/local/src"
+#- name: untar bro
+#  command: tar zvxf bro-{{ bro_ver }}.tar.gz
+#  args:
+#    chdir: "/usr/local/src"
+#- name: configure bro
+#  command: ./configure --prefix=/usr/local/bro
+#  args:
+#    chdir: "/usr/local/src/bro-{{ bro_ver }}"
+#- name: make bro
+#  command: make
+#  args:
+#    chdir: "/usr/local/src/bro-{{ bro_ver }}"
+#- name: make install bro
+#  command: make install
+#  args:
+#    chdir: "/usr/local/src/bro-{{ bro_ver }}"
+
+- name: bro config
+  template: src=broctl.cfg.j2 dest={{ bro_prefix }}/etc/broctl.cfg owner=root group=root mode=0644
+
+- name: bro config
+  template: src=node.cfg.j2 dest={{ bro_prefix }}/etc/node.cfg owner=root group=root mode=0644
+
+- name: bro config
+  template: src=local.bro.j2 dest={{ bro_prefix }}/share/bro/site/local.bro owner=root group=root mode=0644
+
+- name: bro systemd services
+  template: src=bro.systemd.j2 dest=/etc/systemd/system/bro.service owner=root group=root mode=0644
+
+- name: deploy bro
+  command: "{{ bro_prefix }}/bin/broctl deploy"
+  args:
+    chdir: "{{ bro_prefix }}"
+ # notify:
+ #   - stop bro
+
+- name: enable bro at boot
+  service: name=bro.service enabled=yes state=started
+  notify:
+    - reload systemd
+  

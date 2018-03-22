@@ -1,0 +1,29 @@
+---
+
+- name: Add apt HTTPS support
+  package: name=apt-transport-https state=present
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add HTTPS support
+  package: name=ca-certificates state=present
+
+- name: Add apt clickhouse keys
+  apt_key: url='http://repo.yandex.ru/clickhouse/CLICKHOUSE-KEY.GPG'
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Add apt clickhouse repo
+  apt_repository: repo='deb http://repo.yandex.ru/clickhouse/xenial/ stable main'
+  when: (ansible_distribution == "Ubuntu")
+
+- name: Update apt cache if needed.
+  apt: update_cache=yes upgrade=yes
+  when: (ansible_distribution == "Ubuntu")
+
+- name: install ubuntu deps
+  package:
+    state: latest
+    pkg: "{{ item }}"
+  with_items:
+    - clickhouse-client
+    - clickhouse-server-common
+  when: (ansible_distribution == "Ubuntu")

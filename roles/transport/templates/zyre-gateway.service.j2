@@ -1,0 +1,21 @@
+[Unit]
+Description=zyre-gateway service
+
+[Service]
+Type=simple
+User={{ app_user }}
+Group={{ app_user }}
+PIDFile=/run/zyre-gateway.pid
+#ExecStart=/usr/local/gateway/gateway {{ ansible_hostname }}
+ExecStart=/usr/local/gateway/gateway {{ ansible_fqdn }}
+KillMode=process
+Restart=on-failure
+KillSignal=SIGINT
+TimeoutStopSec=5
+PrivateTmp=true
+WorkingDirectory=/usr/local/gateway
+
+EnvironmentFile=-/etc/zyre_gateway.env
+
+[Install]
+WantedBy=multi-user.target
