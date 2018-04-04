@@ -22,8 +22,8 @@
   yum_repository:
     name: bro_ids
     description: bro ids
-    baseurl: http://download.opensuse.org/repositories/network:/bro/CentOS_7/
-    gpgkey: http://download.opensuse.org/repositories/network:/bro/CentOS_7/repodata/repomd.xml.key
+    baseurl: http://downloadcontent.opensuse.org/repositories/network:/bro/CentOS_7/
+    gpgkey: http://downloadcontent.opensuse.org/repositories/network:/bro/CentOS_7/repodata/repomd.xml.key
     gpgcheck: yes
   when: (ansible_distribution == "CentOS")
 

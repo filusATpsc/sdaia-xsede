@@ -1,11 +1,11 @@
 ---
 # tasks file for ssh-logger
 
-- include: firewall.yml
-  tags: firewall
-
 - include: deps.yml
   tags: deps
+
+- include: firewall.yml
+  tags: firewall
 
 - include: sshd.yml
   tags: sshd

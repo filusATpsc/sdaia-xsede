@@ -4,6 +4,10 @@
   shell: /sbin/ip route get 8.8.8.8 | /usr/bin/awk 'NR==1 {print $NF}'; echo
   register: default_int
 
+- name: find our interface name
+  shell: /sbin/ip route get 8.8.8.8 | /bin/egrep -o "dev\ \S+" | cut -f2 -d' '
+  register: bro_interface
+
 - include: users.yml
   tags: users
 

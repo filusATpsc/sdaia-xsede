@@ -1,1 +1,3 @@
-***Release: https://github.com/csirtgadgets/bearded-avenger-deploymentkit/archive/3.0.0a5.tar.gz***
+# Getting Started
+
+[See the Wiki...](https://github.com/csirtgadgets/bearded-avenger-deploymentkit/wiki)

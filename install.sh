@@ -6,4 +6,4 @@ echo 'running ansible...'
 
 
 
-ansible-playbook -vv -i "localhost," -c local ./site.yml
+ansible-playbook -vv -i "localhost," -c local ./site.yml --ask-become-pass

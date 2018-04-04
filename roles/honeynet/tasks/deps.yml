@@ -69,6 +69,7 @@
     - uuid-devel
     - uuid
     - libuuid-devel
+    - policycoreutils-python
 #    - zyre-devel
   when: (ansible_distribution == "CentOS")
 
