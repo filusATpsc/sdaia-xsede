@@ -2,7 +2,9 @@ Fork of SDAIA Project for use by XSEDE
 =======================================
 
 GIT: https://git.ncsa.illinois.edu/awithers/sdaia
+
 CICI: Secure Data Architecture: Shared Intelligence Platform for Protecting our National Cyberinfrastructure
+
 ACI Award Number:1547249
 
 -----------------------
