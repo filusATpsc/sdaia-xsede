@@ -6,7 +6,10 @@
 
 - name: find our interface name
   shell: /sbin/ip route get 8.8.8.8 | /bin/egrep -o "dev\ \S+" | cut -f2 -d' '
-  register: bro_interface
+  register: interface_output
+
+- name: set bro_interface
+  set_fact: bro_interface="{{ interface_output.stdout }}"
 
 - include: users.yml
   tags: users

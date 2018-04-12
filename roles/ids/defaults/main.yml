@@ -6,9 +6,6 @@ app_user: prism
 app_group: "{{ app_user }}"
 app_user_home: "/home/{{ app_user }}"
 
-bro_interface: "ens3"
-#bro_interface: "eth0"
-
-bro_ver: 2.4.1
+bro_ver: 2.5.3
 
 bro_prefix: /opt/bro
